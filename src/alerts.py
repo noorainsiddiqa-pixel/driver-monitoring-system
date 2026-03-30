@@ -1,5 +1,6 @@
 """Alert system for audio beeps and SMS notifications."""
 
+import cv2
 import threading
 import winsound
 from datetime import datetime

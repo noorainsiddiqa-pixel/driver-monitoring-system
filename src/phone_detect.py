@@ -1,7 +1,13 @@
 """Phone detection using YOLOv8."""
 
 import cv2
-from ultralytics import YOLO
+
+try:
+    from ultralytics import YOLO
+except ModuleNotFoundError:
+    YOLO = None
+    print("⚠️ Warning: ultralytics package not installed. Phone detection disabled.")
+
 from .config import Config
 
 
@@ -19,13 +25,18 @@ class PhoneDetector:
         Args:
             model_path: Path to YOLOv8 model weights
         """
-        try:
-            self.model = YOLO(model_path)
-            self.model_loaded = True
-        except Exception as e:
-            print(f"Warning: Could not load YOLO model: {e}")
+        if YOLO is None:
+            print("⚠️ Phone detection disabled because YOLO is unavailable.")
             self.model = None
             self.model_loaded = False
+        else:
+            try:
+                self.model = YOLO(model_path)
+                self.model_loaded = True
+            except Exception as e:
+                print(f"Warning: Could not load YOLO model: {e}")
+                self.model = None
+                self.model_loaded = False
 
         # Detection history for temporal consistency
         self.detection_history = []

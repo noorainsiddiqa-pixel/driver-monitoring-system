@@ -1,9 +1,15 @@
 """Configuration settings for the driver monitoring system."""
 
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
+try:
+    from dotenv import load_dotenv
+except ModuleNotFoundError:
+    load_dotenv = None
+    print("⚠️ Warning: python-dotenv not installed. .env will not be loaded.")
+
+if load_dotenv:
+    load_dotenv()
 
 
 class Config:
